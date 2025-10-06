@@ -31,7 +31,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
                <img 
-        src="public/images/img1.png" 
+        src="images/img1.png" 
         alt="MAC Solar Logo" 
         className={`h-[90] 'filter brightness-1' : ''} transition-all`} 
       />

@@ -6,7 +6,7 @@ const Testimonials = () => {
     {
       name:"shyam kumar",
       location: "patna",
-      images:"images/shyam.jpg",
+      image:"images/shyam.jpg",
       rating: 5,
       systemSize: "3 kW",
       savings: "₹45,000/year",

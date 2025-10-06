@@ -50,7 +50,7 @@ const Contact = () => {
   setEligibilityMessage(eligibilityResult);
 
 try {
-     await axios.post("http://127.0.0.1:8000/api/quote/", formData);
+     await axios.post("https://fullstackproject-toiu.onrender.com/api/quote/", formData);
 
     console.log("Form submitted:", formData);
     alert("Thank you for your inquiry! We'll contact you within 24 hours.");
