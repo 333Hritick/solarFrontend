@@ -52,7 +52,7 @@ const Contact = () => {
 
   try {
     const response = await axios.post(
-     "https://solar-backend-ffse.onrender.com/api/quote",
+     "https://solar-backend-ffse.onrender.com/api/quote/",
       formData,
       {
         headers: {
