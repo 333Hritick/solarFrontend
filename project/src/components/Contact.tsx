@@ -43,33 +43,43 @@ const Contact = () => {
 };
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
+  // Check eligibility
   const eligibilityResult = checkEligibility(formData);
   setEligibilityMessage(eligibilityResult);
 
-try {
-     await axios.post("https://fullstackproject-toiu.onrender.com/api/quote/", formData);
+  try {
+    const response = await axios.post(
+     "https://solar-backend-ffse.onrender.com/api/quote",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("Form submitted:", formData);
+    console.log("Form submitted:", response.data);
     alert("Thank you for your inquiry! We'll contact you within 24 hours.");
-   
+
+    // Reset form
     setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        district: "",
-        monthlyBill: "",
-        rooftopArea: "",
-        message: "",
-      });
-    }
-       catch (error: any) {
+      name: "",
+      email: "",
+      phone: "",
+      district: "",
+      monthlyBill: "",
+      rooftopArea: "",
+      message: "",
+    });
+  } catch (error: any) {
     console.error("Error submitting form:", error.response?.data || error.message);
     alert("Something went wrong. Please try again.");
   }
 };
+
 
   const contactInfo = [
     {
