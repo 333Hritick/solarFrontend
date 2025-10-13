@@ -4,7 +4,7 @@ const Hero = () => {
    <section
   id="home"
   className="relative min-h-screen flex items-center bg-cover bg-center bg-no-repeat"
-  style={{ backgroundImage: "url('/images/solarbg.jpg')" }} // your background image
+  style={{ backgroundImage: "url('images/solarsystem.webp')" }} // your background image
 >
   {/* Optional dark overlay for readability */}
   <div className="absolute inset-0 bg-black/30"></div>

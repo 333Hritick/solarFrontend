@@ -85,12 +85,12 @@ const Contact = () => {
     {
       icon: <Phone className="w-6 h-6 text-sky-500" />,
       title: "Phone",
-      details: ["+91 9835659280", "+91 9386577855"],
+      details: ["+91 9835659280"],
     },
     {
       icon: <Mail className="w-6 h-6 text-sky-500" />,
       title: "Email",
-      details: ["skshyamkumar983@gmail.com", "hritickkumar3138@gmail.com"],
+      details: ["skshyamkumar983@gmail.com"],
     },
     {
       icon: <MapPin className="w-6 h-6 text-sky-500" />,

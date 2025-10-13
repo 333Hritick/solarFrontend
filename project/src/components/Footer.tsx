@@ -20,7 +20,7 @@ const Footer = () => {
     { name: 'Government Subsidies', href: '#subsidies' },
     { name: 'Solar Calculator', href: '#calculator' },
     { name: 'Installation Process', href: '#process' },
-    { name: 'Customer Reviews', href: '#' },
+    { name: 'Customer Reviews', href: '#Testimonials' },
   ];
 
   return (
@@ -31,7 +31,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
                <img 
-        src="images/img1.png" 
+        src="images/solarimg2.png" 
         alt="MAC Solar Logo" 
         className={`h-[90] 'filter brightness-1' : ''} transition-all`} 
       />
