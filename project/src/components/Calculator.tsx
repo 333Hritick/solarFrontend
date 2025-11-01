@@ -1,5 +1,6 @@
 import  { useState, useEffect } from 'react';
 import { Calculator as CalcIcon, Zap, TrendingUp, Sun } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const Calculator = () => {
   const [monthlyBill, setMonthlyBill] = useState(5000);
@@ -169,14 +170,13 @@ const Calculator = () => {
               Get a detailed quote and professional consultation from our solar experts
             </p>
             
-            <button
-    onClick={() =>
-      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
-    }
+<Link to ="/emi-calculator">
+          <button
     className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors">
   
-   Get Personalized Quote
+   Click to Calculate-EMI
   </button>
+  </Link>
           </div>
         </div>
       </div>

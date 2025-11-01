@@ -1,12 +1,13 @@
 import { ArrowRight, Zap, TrendingUp, Shield } from 'lucide-react';
 const Hero = () => {
   return (
-   <section
-  id="home"
-  className="relative min-h-screen flex items-center bg-cover bg-center bg-no-repeat"
-  style={{ backgroundImage: "url('images/solarsystem.webp')" }} // your background image
->
-  {/* Optional dark overlay for readability */}
+  <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  {/* Background slides container */}
+  <div className="absolute inset-0 flex animate-slide-images">
+    <div className="flex-shrink-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('images/solarsystem.jpg')" }} />
+    <div className="flex-shrink-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('images/solarbg.jpg')" }} />
+    <div className="flex-shrink-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('images/solarsystem.webp')" }} />
+  </div>
   <div className="absolute inset-0 bg-black/30"></div>
 
   <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

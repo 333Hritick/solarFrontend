@@ -74,48 +74,60 @@ const Process = () => {
           ))}
         </div>
 
-        <div className="bg-gradient-to-r from-gray-50 to-sky-50 rounded-2xl p-8 md:p-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                What's Included in Our Service
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-center">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="text-center lg:text-left">
-              <div className="bg-white rounded-2xl p-8 shadow-lg">
-                <h4 className="text-2xl font-bold text-gray-900 mb-4">
-                  End-to-End Service
-                </h4>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  We take care of everything from initial consultation to ongoing maintenance. 
-                  Your only job is to enjoy the savings!
-                </p>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Total Installation Time</span>
-                    <span className="font-semibold text-sky-500">15-30 days</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Warranty Period</span>
-                    <span className="font-semibold text-green-500">25 years</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Customer Rating</span>
-                    <span className="font-semibold text-yellow-500">4.9/5 ⭐</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="relative bg-gradient-to-r from-gray-50 to-sky-50 rounded-2xl p-8 md:p-12 overflow-hidden">
+  <img
+    src="/images/solarbg.jpg"
+    alt="Solar background"
+    className="absolute inset-0 w-full h-full object-cover opacity-60"
+  />
+
+  <div className="absolute inset-0 bg-white/20"></div>
+
+  <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <h3 className="text-3xl font-bold text-gray-900 mb-6">
+        What's Included in Our Service
+      </h3>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {features.map((feature, index) => (
+          <div key={index} className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+            <span className="text-gray-700">{feature}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="text-center lg:text-left relative z-10">
+      <div className="bg-white rounded-2xl p-8 shadow-lg">
+        <h4 className="text-2xl font-bold text-gray-900 mb-4">
+          End-to-End Service
+        </h4>
+        <p className="text-gray-600 mb-6 leading-relaxed">
+          We take care of everything from initial consultation to ongoing
+          maintenance. Your only job is to enjoy the savings!
+        </p>
+
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Total Installation Time</span>
+            <span className="font-semibold text-sky-500">15-30 days</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Warranty Period</span>
+            <span className="font-semibold text-green-500">25 years</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">Customer Rating</span>
+            <span className="font-semibold text-yellow-500">4.9/5 ⭐</span>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
         <div className="mt-12 text-center">
           <button className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors">

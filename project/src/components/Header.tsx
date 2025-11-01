@@ -1,5 +1,6 @@
 import  { useState, useEffect } from 'react';
 import {  Menu, X } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,6 +21,7 @@ const Header = () => {
     { name: 'Calculator', href: '#calculator' },
     { name: 'Process', href: '#process' },
     { name: 'Contact', href: '#contact' },
+    
   ];
 
   return (
@@ -53,6 +55,11 @@ const Header = () => {
             {item.name}
           </a>
         ))}
+        <Link 
+        to="/emi-calculator" className="hover:text-green-400"
+        >
+        EMI Calculator
+      </Link>
       </nav>
 
       {/* Desktop Button */}

@@ -1,85 +1,96 @@
-import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
-import axios from"axios";
+import React, { useState } from "react";
+import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const Contact = () => {
+const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    district: '',
-    monthlyBill: '',
-    rooftopArea: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    district: "",
+    monthlyBill: "",
+    rooftopArea: "",
+    message: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const [eligibilityMessage, setEligibilityMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ✅ Eligibility check function
+  const checkEligibility = (data: any) => {
+    const area = parseFloat(data.rooftopArea);
+    const bill = parseFloat(data.monthlyBill);
+
+    if (isNaN(area) || isNaN(bill)) {
+      return "⚠️ Please enter valid rooftop area and monthly bill.";
+    }
+
+    if (area < 100) {
+      return "❌ Your rooftop area is too small for solar installation.";
+    }
+
+    if ((data as any).roofShade === "Yes") {
+      return "⚠️ Your roof has shade, solar efficiency may be low.";
+    }
+
+    const estimatedSavings = Math.round(bill * 0.6);
+    return `✅ Eligible! You could save around ₹${estimatedSavings} per month on your bill.`;
+  };
+
+  // ✅ Handle input change
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-  const [eligibilityMessage, setEligibilityMessage] = useState<string | null>(null);
 
-  const checkEligibility = (data: any) => {
-  const area = parseFloat(data.rooftopArea);
-  const bill = parseFloat(data.monthlyBill);
+  // ✅ Handle form submit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (isNaN(area) || isNaN(bill)) {
-    return "⚠️ Please enter valid rooftop area and monthly bill.";
-  }
+    if (isSubmitting) return; // Prevent double-clicks
 
-  if (area < 100) {
-    return "❌ Your rooftop area is too small for solar installation.";
-  }
+    const eligibilityResult = checkEligibility(formData);
+    setEligibilityMessage(eligibilityResult);
 
-  if (data.roofShade === "Yes") {
-    return "⚠️ Your roof has shade, solar efficiency may be low.";
-  }
+    setIsSubmitting(true);
+    const toastId = toast.loading("⏳ Submitting your form...");
 
-  // Estimate savings (60% of bill)
-  const estimatedSavings = Math.round(bill * 0.6);
-  return `✅ Eligible! You could save around ₹${estimatedSavings} per month on your bill.`;
-};
+    try {
+      const response = await axios.post(
+        "https://solar-backend-ffse.onrender.com/api/quote/",
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
 
+      console.log("Form submitted:", response.data);
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  // Check eligibility
-  const eligibilityResult = checkEligibility(formData);
-  setEligibilityMessage(eligibilityResult);
-
-  try {
-    const response = await axios.post(
-     "https://solar-backend-ffse.onrender.com/api/quote/",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log("Form submitted:", response.data);
-    alert("Thank you for your inquiry! We'll contact you within 24 hours.");
-
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      district: "",
-      monthlyBill: "",
-      rooftopArea: "",
-      message: "",
-    });
-  } catch (error: any) {
-    console.error("Error submitting form:", error.response?.data || error.message);
-    alert("Something went wrong. Please try again.");
-  }
-};
-
+      // ✅ Update toast and clear form
+      toast.success("✅ Thank you! We'll contact you within 24 hours.", { id: toastId });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        district: "",
+        monthlyBill: "",
+        rooftopArea: "",
+        message: "",
+      });
+    } catch (error: any) {
+      console.error("Error submitting form:", error.response?.data || error.message);
+      toast.error("❌ Something went wrong. Please try again.", { id: toastId });
+    } finally {
+      // ✅ Always stop loading after delay
+      setTimeout(() => {
+        setIsSubmitting(false);
+        toast.dismiss(toastId);
+      }, 1500);
+    }
+  };
 
   const contactInfo = [
     {
@@ -246,13 +257,28 @@ const Contact = () => {
                 />
               </div>
 
-              <button
-                type="submit"
-                className="w-full bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors flex items-center justify-center"
-              >
-                <Send className="w-5 h-5 mr-2" />
-                Get Free Quote
-              </button>
+             <button
+        type="submit"
+        disabled={isSubmitting}
+        className={`w-full ${
+          isSubmitting
+            ? "bg-sky-400 cursor-not-allowed"
+            : "bg-sky-500 hover:bg-sky-600"
+        } text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center`}
+      >
+        {isSubmitting ? (
+          <>
+            <span className="loader mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5 animate-spin"></span>
+            Submitting...
+          </>
+        ) : (
+          <>
+            <Send className="w-5 h-5 mr-2" />
+            Get Free Quote
+          </>
+        )}
+      </button>
+
             </form>
             {eligibilityMessage && (
   <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center font-medium">
