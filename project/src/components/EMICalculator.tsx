@@ -38,7 +38,7 @@ const EMICalculator: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post<ResultData>(
-        "http://localhost:8000/api/calculate_emi/",
+        "https://solar-backend-ffse.onrender.com/api/calculate_emi/",
         form
       );
       setResult(response.data);
