@@ -23,7 +23,6 @@ const EMICalculator: React.FC = () => {
     cost: 0,
     subsidy_percent: 0,
     down_payment: 0,
-    interest_rate: 0,
     tenure_years: 0,
   });
 
@@ -35,17 +34,22 @@ const EMICalculator: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post<ResultData>(
-        "https://solar-backend-ffse.onrender.com/api/calculate_emi/",
-        form
-      );
-      setResult(response.data);
-    } catch (error) {
-      console.error("Error calculating EMI:", error);
-    }
-  };
+  e.preventDefault();
+
+  try {
+    const response = await axios.post<ResultData>(
+      "https://solar-backend-ffse.onrender.com/api/calculate_emi/",
+      {
+        ...form,          // existing user inputs
+        interest_rate: 7, // ✅ fixed interest rate
+      }
+    );
+
+    setResult(response.data);
+  } catch (error) {
+    console.error("Error calculating EMI:", error);
+  }
+};
 
   return (
     <div className ="min-h-screen flex flex-col justify-center bg-gray-900 text-white" style={{paddingTop:"100px"}}>
@@ -75,13 +79,7 @@ const EMICalculator: React.FC = () => {
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 border border-gray-700"
         />
-        <input
-          type="number"
-          name="interest_rate"
-          placeholder="Interest Rate (%)"
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 border border-gray-700"
-        />
+       
         <input
           type="number"
           name="tenure_years"
@@ -104,7 +102,7 @@ const EMICalculator: React.FC = () => {
           <p>Subsidy Amount: ₹{result.subsidy_amount}</p>
           <p>Net Cost After Subsidy: ₹{result.net_cost_after_subsidy}</p>
           <p>Monthly EMI: ₹{result.emi_per_month}</p>
-          <p>Total Interest: ₹{result.total_interest}</p>
+          <p>Total Interest at rate of(7%): ₹{result.total_interest}</p>
           <p>Total Payable: ₹{result.total_payment}</p>
         </div>
       )}
