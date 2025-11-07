@@ -60,6 +60,9 @@ const Header = () => {
         >
         EMI Calculator
       </Link>
+      <Link to="/register" className="hover:text-green-400">Register</Link>
+      <Link to="/login" className="hover:text-green-400">Login</Link>
+ 
       </nav>
 
       {/* Desktop Button */}

@@ -11,6 +11,8 @@ import Footer from "./components/Footer";
 import EMICalculator from "./components/EMICalculator";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import RegisterPage from "./components/RegisterPage";
+import LoginPage from "./components/LoginPage";
 
 function App() {
   return (
@@ -35,8 +37,11 @@ function App() {
         />
 
         <Route path="/emi-calculator" element={<EMICalculator />} />
+         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
      <Toaster position="top-center" reverseOrder={false} />
+
 
     </div>
   );
