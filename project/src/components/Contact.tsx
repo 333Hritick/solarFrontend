@@ -64,7 +64,8 @@ const Contact: React.FC = () => {
       const response = await axios.post(
         "https://solar-backend-ffse.onrender.com/api/quote/",
         formData,
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json" } 
+      }
       );
 
       console.log("Form submitted:", response.data);

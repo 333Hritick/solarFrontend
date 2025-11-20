@@ -14,7 +14,7 @@ const Subsidies = () => {
         "Group housing societies",
         "Residential welfare associations",
       ],
-      bgImage: "/images/modiimg.webp", // ✅ your Narendra Modi image path
+      bgImage: "/images/pm.jpg", // ✅ your Narendra Modi image path
     },
     {
       title: "State Government Incentives",

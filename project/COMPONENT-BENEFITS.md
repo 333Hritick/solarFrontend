@@ -27,10 +27,14 @@ const Benefits = () => {
       description: "Generate your own power and reduce dependence on grid electricity. Store excess energy with battery backup options.",
     },
     {
-      icon: <Award className="w-12 h-12 text-purple-500" />,
-      title: "Government Support",
-      description: "Get up to 40% subsidy from central and state governments. Additional tax benefits and accelerated depreciation for businesses.",
-    },
+  icon: <Award className="w-12 h-12 text-purple-500" />,
+  title: "Government Support",
+  description: "Get up to 40% subsidy from central and state governments. Additional tax benefits and accelerated depreciation for businesses.",
+  highlighted: true,
+  image: "/images/bill.jpg", 
+},
+
+
     {
       icon: <Users className="w-12 h-12 text-blue-500" />,
       title: "Expert Installation",

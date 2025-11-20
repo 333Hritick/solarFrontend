@@ -1,37 +1,50 @@
-import React from 'react';
-import { Leaf, DollarSign, Home, Zap, Award, Users } from 'lucide-react';
+import React, { useState } from "react";
+import { Leaf, DollarSign, Home, Zap, Award, Users, X } from "lucide-react";
 
 const Benefits = () => {
+  const [popupImage, setPopupImage] = useState<string | null>(null);
+
   const benefits = [
     {
       icon: <DollarSign className="w-12 h-12 text-green-500" />,
       title: "Massive Savings",
-      description: "Save 70-90% on electricity bills with solar power. Average savings of ₹50,000+ per year for typical homes.",
+      description:
+        "Save 70-90% on electricity bills with solar power. Average savings of ₹50,000+ per year for typical homes.",
     },
     {
       icon: <Leaf className="w-12 h-12 text-green-500" />,
       title: "Eco-Friendly",
-      description: "Reduce your carbon footprint by 4-5 tons of CO2 annually. Help create a cleaner environment for future generations.",
+      description:
+        "Reduce your carbon footprint by 4-5 tons of CO2 annually. Help create a cleaner environment for future generations.",
     },
     {
       icon: <Home className="w-12 h-12 text-sky-500" />,
       title: "Increase Home Value",
-      description: "Solar installations increase property value by 15-20%. Make your home more attractive to future buyers.",
+      description:
+        "Solar installations increase property value by 15-20%. Make your home more attractive to future buyers.",
     },
     {
       icon: <Zap className="w-12 h-12 text-yellow-500" />,
       title: "Energy Independence",
-      description: "Generate your own power and reduce dependence on grid electricity. Store excess energy with battery backup options.",
+      description:
+        "Generate your own power and reduce dependence on grid electricity. Store excess energy with battery backup options.",
     },
+
+    // ⭐ Government Support card with image + highlight
     {
       icon: <Award className="w-12 h-12 text-purple-500" />,
       title: "Government Support",
-      description: "Get up to 40% subsidy from central and state governments. Additional tax benefits and accelerated depreciation for businesses.",
+      description:
+        "Get up to 40% subsidy. Bills below show real proof of government benefits.",
+      highlighted: true,
+      image: "/images/bill.jpg", // <-- your bill image
     },
+
     {
       icon: <Users className="w-12 h-12 text-blue-500" />,
       title: "Expert Installation",
-      description: "Professional installation by certified technicians. Comprehensive maintenance and monitoring support included.",
+      description:
+        "Professional installation by certified technicians. Comprehensive maintenance and monitoring support included.",
     },
   ];
 
@@ -43,38 +56,78 @@ const Benefits = () => {
             Why Choose Solar Energy?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Solar power isn't just good for the environment—it's great for your wallet too. 
-            Discover the amazing benefits of switching to clean, renewable energy.
+            Solar power isn't just good for the environment—it's great for your
+            wallet too.
           </p>
         </div>
 
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+              className={`rounded-2xl p-8 shadow-lg transition-all duration-300 group 
+                ${
+                  benefit.highlighted
+                    ? "bg-yellow-100 border-4 border-yellow-500 scale-105"
+                    : "bg-white"
+                }
+              `}
             >
               <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
                 {benefit.icon}
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">{benefit.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                {benefit.title}
+              </h3>
+
+              <p className="text-gray-600 leading-relaxed">
+                {benefit.description}
+              </p>
+
+              {/* Small image preview */}
+              {benefit.image && (
+                <img
+                  src={benefit.image}
+                  alt="Bill proof"
+                  className="mt-4 rounded-lg shadow-md w-32 h-32 object-cover cursor-pointer"
+                  onClick={() => setPopupImage(benefit.image)}
+                />
+              )}
             </div>
           ))}
         </div>
 
+        {/* Success banner */}
         <div className="mt-16 bg-gradient-to-r from-sky-500 to-emerald-500 rounded-2xl p-8 md:p-12 text-center">
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Start Saving?
           </h3>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join over 10,000 satisfied customers who've made the switch to solar energy
+            Join thousands of homeowners switching to clean energy.
           </p>
-          <button className="bg-white text-sky-500 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-50 transition-colors">
-            Get Your Free Quote Today
-          </button>
         </div>
       </div>
+
+      {/* POPUP MODAL */}
+      {popupImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative max-w-3xl">
+            <button
+              className="absolute -top-10 right-0 text-white text-3xl"
+              onClick={() => setPopupImage(null)}
+            >
+              <X />
+            </button>
+            <img
+              src={popupImage}
+              className="rounded-lg shadow-xl max-h-[85vh]"
+              alt="Full bill"
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 };
