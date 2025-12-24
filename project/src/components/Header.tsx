@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -13,12 +13,12 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "Benefits", href: "#benefits" },
-    { name: "Subsidies", href: "#subsidies" },
-    { name: "Calculator", href: "#calculator" },
-    { name: "Process", href: "#process" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Benefits", href: "/#benefits" },
+    { name: "Subsidies", href: "/#subsidies" },
+    { name: "Calculator", href: "/#calculator" },
+    { name: "Process", href: "/#process" },
+    { name: "Contact", href: "/#contact" },
   ];
 
   return (
@@ -29,41 +29,36 @@ const Header = () => {
           : "bg-gradient-to-b from-sky-800/90 via-sky-700/70 to-transparent"
       }`}
     >
+      {/* MAIN HEADER ROW */}
       <div className="flex items-center justify-between px-4 md:px-8 py-3 md:h-20">
-        {/* Logo pinned to top-left */}
+
+        {/* LOGO */}
         <Link to="/" className="flex-shrink-0">
           <img
-            src="images/img1.png"
+            src="/images/img1.png"
             alt="Logo"
-            className="h-16 sm:h-20 lg:h-24 w-auto"
+            className="h-10 sm:h-12 md:h-14 lg:h-20"
+
           />
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center space-x-8 text-lg">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
-              className={`relative font-medium transition-colors duration-200 ${
+              to={item.href}
+              className={`relative font-medium transition ${
                 isScrolled ? "text-gray-800" : "text-white"
-              } after:absolute after:block after:h-[2px] after:bg-sky-500 after:w-0 after:transition-all hover:after:w-full after:bottom-0 after:left-0`}
+              } after:absolute after:block after:h-[2px] after:bg-sky-500 after:w-0 hover:after:w-full after:bottom-0 after:left-0`}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
-          <Link
-            to="/emi-calculator"
-            className={`font-medium transition-colors duration-200 ${
-              isScrolled ? "text-sky-600 hover:text-sky-800" : "text-white hover:text-sky-300"
-            }`}
-          >
-            EMI Calculator
-          </Link>
         </nav>
 
-        {/* Auth Buttons (Desktop) */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* DESKTOP AUTH BUTTONS */}
+        <div className="hidden md:flex items-center gap-4">
           <Link
             to="/login"
             className={`px-5 py-2 border rounded-full transition ${
@@ -74,6 +69,7 @@ const Header = () => {
           >
             Login
           </Link>
+
           <Link
             to="/register"
             className={`px-5 py-2 rounded-full transition ${
@@ -86,9 +82,9 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* MOBILE MENU BUTTON */}
         <button
-          className="md:hidden z-50"
+          className="md:hidden flex items-center"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
@@ -99,32 +95,33 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg border-t animate-fade-in">
-          <div className="px-6 py-4 space-y-3 text-gray-800">
+        <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg border-t">
+          <div className="px-6 py-4 space-y-3">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
-                className="block py-2 font-medium hover:text-sky-600 transition"
+                to={item.href}
+                className="block py-2 font-medium text-gray-800 hover:text-sky-600"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
 
-            <hr className="my-2" />
+            <hr />
 
             <Link
               to="/login"
-              className="block py-2 text-center border border-sky-600 rounded-full text-sky-600 hover:bg-sky-600 hover:text-white transition"
+              className="block py-2 text-center border border-sky-600 rounded-full text-sky-600 hover:bg-sky-600 hover:text-white"
             >
               Login
             </Link>
+
             <Link
               to="/register"
-              className="block py-2 text-center rounded-full bg-sky-600 text-white hover:bg-sky-700 transition"
+              className="block py-2 text-center rounded-full bg-sky-600 text-white hover:bg-sky-700"
             >
               Sign Up
             </Link>

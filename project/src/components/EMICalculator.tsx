@@ -40,8 +40,8 @@ const EMICalculator: React.FC = () => {
     const response = await axios.post<ResultData>(
       "https://solar-backend-ffse.onrender.com/api/calculate_emi/",
       {
-        ...form,          // existing user inputs
-        interest_rate: 7, // ✅ fixed interest rate
+        ...form,          
+        interest_rate: 7, 
       }
     );
 
@@ -52,7 +52,10 @@ const EMICalculator: React.FC = () => {
 };
 
   return (
+
+
     <div className ="min-h-screen flex flex-col justify-center bg-gray-900 text-white" style={{paddingTop:"100px"}}>
+      
     <div className="max-w-lg mx-auto mt-100 p-8 bg-gray-900 text-white rounded-2xl shadow-lg">
       <h2 className="text-2xl font-semibold text-center mb-8">
         💰 Solar EMI & Subsidy Calculator

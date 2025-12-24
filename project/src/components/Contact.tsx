@@ -17,7 +17,7 @@ const Contact: React.FC = () => {
   const [eligibilityMessage, setEligibilityMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Eligibility check function
+  
   const checkEligibility = (data: any) => {
     const area = parseFloat(data.rooftopArea);
     const bill = parseFloat(data.monthlyBill);
@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
     return `✅ Eligible! You could save around ₹${estimatedSavings} per month on your bill.`;
   };
 
-  // ✅ Handle input change
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -48,11 +48,11 @@ const Contact: React.FC = () => {
     });
   };
 
-  // ✅ Handle form submit
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isSubmitting) return; // Prevent double-clicks
+    if (isSubmitting) return; 
 
     const eligibilityResult = checkEligibility(formData);
     setEligibilityMessage(eligibilityResult);
@@ -70,7 +70,7 @@ const Contact: React.FC = () => {
 
       console.log("Form submitted:", response.data);
 
-      // ✅ Update toast and clear form
+      
       toast.success("✅ Thank you! We'll contact you within 24 hours.", { id: toastId });
       setFormData({
         name: "",
@@ -85,7 +85,7 @@ const Contact: React.FC = () => {
       console.error("Error submitting form:", error.response?.data || error.message);
       toast.error("❌ Something went wrong. Please try again.", { id: toastId });
     } finally {
-      // ✅ Always stop loading after delay
+      
       setTimeout(() => {
         setIsSubmitting(false);
         toast.dismiss(toastId);
@@ -141,7 +141,7 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
+          
           <div className="bg-gray-50 rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">
               Request Your Personalized Quote
@@ -289,7 +289,7 @@ const Contact: React.FC = () => {
 
           </div>
 
-          {/* Contact Information */}
+         
           <div className="space-y-8">
             <div className="bg-gradient-to-br from-sky-500 to-emerald-500 rounded-2xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>

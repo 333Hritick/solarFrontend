@@ -1,10 +1,11 @@
-import { ArrowRight, Zap, TrendingUp, Shield } from 'lucide-react';
+import { ArrowRight, Zap, TrendingUp, Shield } from "lucide-react";
 
 const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white"
+      className="relative min-h-screen flex items-start justify-center overflow-hidden bg-white pt-20 md:pt-24"
+
     >
       {/* PM Surya Ghar Section */}
       <div className="container mx-auto px-6 py-10 relative z-10">
@@ -14,7 +15,9 @@ const Hero = () => {
           <div className="animate-fade-up">
             <h1 className="text-4xl md:text-6xl font-extrabold text-sky-900 leading-tight mb-6">
               PM Surya Ghar:
-              <span className="block text-blue-600">Muft Bijli Yojana</span>
+              <span className="block text-blue-600">
+                Muft Bijli Yojana
+              </span>
             </h1>
 
             <p className="text-lg text-gray-700 mb-6">
@@ -26,14 +29,18 @@ const Hero = () => {
 
             <p className="font-semibold text-gray-800 text-xl">
               Shri Narendra Modi <br />
-              <span className="text-gray-600 text-base">Hon’ble Prime Minister of India</span>
+              <span className="text-gray-600 text-base">
+                Hon’ble Prime Minister of India
+              </span>
             </p>
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-5 mt-10">
               <button
                 onClick={() =>
-                  document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth" })
+                  document
+                    .getElementById("calculator")
+                    ?.scrollIntoView({ behavior: "smooth" })
                 }
                 className="group bg-sky-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl hover:bg-sky-700 transition-all duration-300 flex items-center"
               >
@@ -43,7 +50,9 @@ const Hero = () => {
 
               <button
                 onClick={() =>
-                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                  document
+                    .getElementById("contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
                 }
                 className="border-2 border-sky-600 text-sky-700 px-8 py-4 rounded-full font-semibold text-lg hover:bg-sky-600 hover:text-white shadow-lg transition-all duration-300"
               >
@@ -55,12 +64,11 @@ const Hero = () => {
           {/* Right Image Section */}
           <div className="flex justify-center">
             <img
-              src="images/modi.png" 
+              src="images/modi.png"
               alt="PM Modi"
               className="w-full max-w-md object-contain drop-shadow-xl"
             />
           </div>
-
         </div>
 
         {/* Features Section */}
@@ -90,7 +98,9 @@ const Hero = () => {
               className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 text-center shadow-xl hover:scale-[1.04] transition-transform duration-300"
             >
               <Icon className={`w-14 h-14 mx-auto mb-4 ${color}`} />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                {title}
+              </h3>
               <p className="text-gray-700">{text}</p>
             </div>
           ))}

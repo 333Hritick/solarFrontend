@@ -30,14 +30,13 @@ const Benefits = () => {
         "Generate your own power and reduce dependence on grid electricity. Store excess energy with battery backup options.",
     },
 
-    // ⭐ Government Support card with image + highlight
     {
       icon: <Award className="w-12 h-12 text-purple-500" />,
       title: "Government Support",
       description:
         "Get up to 40% subsidy. Bills below show real proof of government benefits.",
       highlighted: true,
-      image: "/images/bill.jpg", // <-- your bill image
+      image: "/images/bill.jpg", 
     },
 
     {
@@ -61,7 +60,6 @@ const Benefits = () => {
           </p>
         </div>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
             <div
@@ -86,7 +84,7 @@ const Benefits = () => {
                 {benefit.description}
               </p>
 
-              {/* Small image preview */}
+              
               {benefit.image && (
                 <img
                   src={benefit.image}
@@ -99,7 +97,6 @@ const Benefits = () => {
           ))}
         </div>
 
-        {/* Success banner */}
         <div className="mt-16 bg-gradient-to-r from-sky-500 to-emerald-500 rounded-2xl p-8 md:p-12 text-center">
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Start Saving?
@@ -110,7 +107,7 @@ const Benefits = () => {
         </div>
       </div>
 
-      {/* POPUP MODAL */}
+   
       {popupImage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="relative max-w-3xl">
