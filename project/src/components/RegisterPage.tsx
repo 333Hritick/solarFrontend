@@ -13,7 +13,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/register/", form);
+      await axios.post("https://solar-backend-ffse.onrender.com/api/register/", form);
       alert("Registered successfully!");
        setForm({
       name: "",
