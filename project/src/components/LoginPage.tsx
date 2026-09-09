@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { login, getAccessToken } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+import { Mail, Lock } from "lucide-react";
+import { useDevice } from "./context/DeviceContext";  // ✅ import context
 
 const LoginPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+  const { setHasDevice, setLoading } = useDevice();   // ✅ use context
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -10,64 +16,50 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/login/", form);
+      await login(form.email, form.password);
+      const token = getAccessToken();
 
-      console.log("RESPONSE:", res.data);
+      const res = await axios.get("http://localhost:8000/api/profile/", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-      // Save tokens to localStorage 
-      localStorage.setItem("access_token", res.data.access);
-      localStorage.setItem("refresh_token", res.data.refresh);
-
-      console.log("Tokens saved:", res.data.access);
-
-      alert("Login successful!");
-
-      //  Passing token through URL
-      const token = res.data.access; 
-      window.location.href = `http://localhost:5174/dashboard?token=${token}`;
-
+      setLoading(false);
+      if (res.data.devices && res.data.devices.length > 0) {
+        setHasDevice(true);   // ✅ update context
+        navigate("/dashboard", { replace: true });
+      } else {
+        setHasDevice(false);
+        navigate("/register-device", { replace: true });
+      }
     } catch (err) {
-      alert("Invalid login credentials");
+      alert("Invalid credentials");
       console.error("Login error:", err);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md space-y-4 w-80"
-      >
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">
+      <form onSubmit={handleSubmit} autoComplete="off" className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-sky-700 mb-6">Welcome Back</h2>
+        <p className="text-center text-gray-500 mb-6">Login to access your dashboard</p>
 
-        <input
-          type="text"
-          name="email"
-          placeholder="Enter email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
+        <div className="flex items-center bg-gray-100 rounded-lg mb-4 px-3">
+          <Mail className="w-5 h-5 text-sky-600 mr-2" />
+          <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} className="w-full p-2 bg-transparent outline-none" required />
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
+        <div className="flex items-center bg-gray-100 rounded-lg mb-6 px-3">
+          <Lock className="w-5 h-5 text-sky-600 mr-2" />
+          <input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} className="w-full p-2 bg-transparent outline-none" required />
+        </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded"
-        >
-          Login
-        </button>
+        <button type="submit" className="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-lg font-semibold transition">Login</button>
+
+        <p className="text-center text-gray-600 mt-4">
+          Don’t have an account?{" "}
+          <span onClick={() => navigate("/register")} className="text-sky-600 font-semibold cursor-pointer hover:underline">Register</span>
+        </p>
       </form>
     </div>
   );
