@@ -1,14 +1,13 @@
-// src/services/authService.ts
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;  // ✅ use env variable
+const API_URL = import.meta.env.VITE_API_URL;
 
 // ✅ Login and save tokens
 export const login = async (email: string, password: string) => {
-  const res = await axios.post(`${API_URL}/login/`, { email, password });
+  const res = await axios.post(`${API_URL}/token/`, { email, password });
   localStorage.setItem("accessToken", res.data.access);
   localStorage.setItem("refreshToken", res.data.refresh);
-  return res.data; // contains access + refresh
+  return res.data;
 };
 
 // ✅ Get tokens
