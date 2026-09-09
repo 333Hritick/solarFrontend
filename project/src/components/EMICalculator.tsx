@@ -1,23 +1,20 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import { calculateEmi } from "../api";   // ✅ import centralized API
 
 interface FormData {
   cost: number;
   subsidy_percent: number;
   down_payment: number;
-  interest_rate: number;
   tenure_years: number;
 }
 
 interface ResultData {
-  original_cost: number;
   subsidy_amount: number;
   net_cost_after_subsidy: number;
   emi_per_month: number;
   total_interest: number;
   total_payment: number;
 }
-
 const EMICalculator: React.FC = () => {
   const [form, setForm] = useState<FormData>({
     cost: 0,
@@ -34,23 +31,17 @@ const EMICalculator: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault();
-
-  try {
-    const response = await axios.post<ResultData>(
-      "https://solar-backend-ffse.onrender.com/api/calculate_emi/",
-      {
-        ...form,          
-        interest_rate: 7, 
-      }
-    );
-
-    setResult(response.data);
-  } catch (error) {
-    console.error("Error calculating EMI:", error);
-  }
-};
-
+    e.preventDefault();
+    try {
+      const response = await calculateEmi({
+        ...form,
+        interest_rate: 7, // ✅ add extra field
+      });
+      setResult(response.data);
+    } catch (error) {
+      console.error("Error calculating EMI:", error);
+    }
+  };
   return (
 
 

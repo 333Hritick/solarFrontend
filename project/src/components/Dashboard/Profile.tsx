@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAccessToken, refreshAccessToken, logout } from "../../services/authService";
+import { getProfile } from "../../api";  // ✅ centralized API
 import { User, Mail, Phone, MapPin, Briefcase, Cpu } from "lucide-react";
 
 interface Device {
@@ -30,28 +31,23 @@ const Profile: React.FC = () => {
         return;
       }
 
-      let res = await fetch("http://localhost:8000/api/profile/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      try {
+        let res = await getProfile(token);
 
-      if (res.status === 401) {
-        token = await refreshAccessToken();
-        if (!token) {
-          logout();
-          return;
+        // If unauthorized, try refreshing
+        if (res.status === 401) {
+          token = await refreshAccessToken();
+          if (!token) {
+            logout();
+            return;
+          }
+          res = await getProfile(token);
         }
-        res = await fetch("http://localhost:8000/api/profile/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
 
-      if (!res.ok) {
-        console.error("Profile fetch failed:", res.status);
-        return;
+        setProfile(res.data);
+      } catch (err) {
+        console.error("Profile fetch failed:", err);
       }
-
-      const data = await res.json();
-      setProfile(data);
     };
 
     fetchProfile();

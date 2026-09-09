@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { getDaphneCalculations } from "../../api";  // centralized API
 
 const CalculationPanel: React.FC = () => {
   const [result, setResult] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/daphne/calculations/")
-      .then(res => res.json())
-      .then(data => setResult(data.value))
-      .catch(err => console.error("Error fetching calculations:", err));
+    const fetchCalculations = async () => {
+      try {
+        const res = await getDaphneCalculations();
+        const data: { value: number } = res.data;
+        setResult(data.value);
+      } catch (err) {
+        console.error("Error fetching calculations:", err);
+      }
+    };
+    fetchCalculations();
   }, []);
 
   return (

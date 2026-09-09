@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { login, getAccessToken } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { login, getAccessToken } from "../services/authService";
 import { Mail, Lock } from "lucide-react";
-import { useDevice } from "./context/DeviceContext";  // ✅ import context
+import { useDevice } from "./context/DeviceContext";
+import { getProfile } from "../api";   // ✅ import centralized API
 
 const LoginPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { setHasDevice, setLoading } = useDevice();   // ✅ use context
+  const { setHasDevice, setLoading } = useDevice();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,14 +19,17 @@ const LoginPage: React.FC = () => {
     try {
       await login(form.email, form.password);
       const token = getAccessToken();
+if (!token) {
+  alert("You must be logged in.");
+  navigate("/login");
+  return;
+}
 
-      const res = await axios.get("http://localhost:8000/api/profile/", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+const res = await getProfile(token);   // ✅ use api.ts helper
 
       setLoading(false);
       if (res.data.devices && res.data.devices.length > 0) {
-        setHasDevice(true);   // ✅ update context
+        setHasDevice(true);
         navigate("/dashboard", { replace: true });
       } else {
         setHasDevice(false);

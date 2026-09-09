@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Lock, Home, Briefcase } from "lucide-react";
+import { registerUser } from "../api";   // ✅ use centralized API
+
 
 const RegisterPage: React.FC = () => {
   const [form, setForm] = useState({
@@ -49,32 +51,32 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    setLoading(true);
-    try {
-      await axios.post("http://127.0.0.1:8000/api/register/", form);
-      alert("Registered successfully!");
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        address: "",
-        accounttype: "",
-      });
-      navigate("/login"); // ✅ go to login after success
-    } catch (err: any) {
-      if (err.response && err.response.data) {
-        setErrors(err.response.data); // show backend validation errors
-      } else {
-        alert("Registration failed!");
-      }
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    await registerUser(form);   // ✅ use centralized API
+    alert("Registered successfully!");
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      address: "",
+      accounttype: "",
+    });
+    navigate("/login");
+  } catch (err: any) {
+    if (err.response && err.response.data) {
+      setErrors(err.response.data);
+    } else {
+      alert("Registration failed!");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">

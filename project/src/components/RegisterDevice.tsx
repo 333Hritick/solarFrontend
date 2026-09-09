@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken } from "../services/authService";
-import axios from "axios";
-import { useDevice } from "./context/DeviceContext";  // ✅ import context
-
-const API_URL = "http://localhost:8000/api";
+import { useDevice } from "./context/DeviceContext";
+import { registerDevice, getProfile } from "../api";   // ✅ use centralized API
 
 const RegisterDevice: React.FC = () => {
   const [form, setForm] = useState({
@@ -18,7 +16,7 @@ const RegisterDevice: React.FC = () => {
   });
 
   const navigate = useNavigate();
-  const { setHasDevice, setLoading } = useDevice();   // ✅ use context
+  const { setHasDevice, setLoading } = useDevice();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,21 +32,21 @@ const RegisterDevice: React.FC = () => {
         return;
       }
 
-      await axios.post(`${API_URL}/device/register/`, {
-        ...form,
-        capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
-        installation_date: form.installation_date || null,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // ✅ Call API helper
+      await registerDevice(
+        {
+          ...form,
+          capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
+          installation_date: form.installation_date || null,
+        },
+        token
+      );
 
-      const res = await axios.get("http://localhost:8000/api/profile/", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await getProfile(token);
 
       setLoading(false);
       if (res.data.devices && res.data.devices.length > 0) {
-        setHasDevice(true);   // ✅ update context
+        setHasDevice(true);
         navigate("/dashboard", { replace: true });
       } else {
         setHasDevice(false);
@@ -63,6 +61,8 @@ const RegisterDevice: React.FC = () => {
       console.error("Register device error:", err);
     }
   };
+
+
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">

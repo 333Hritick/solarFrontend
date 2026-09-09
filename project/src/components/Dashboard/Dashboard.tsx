@@ -11,6 +11,8 @@ import Profile from "./Profile";
 import NotificationDropdown from "./NotificationDropdown";
 import RegisterDevice from "../RegisterDevice";
 import { getAccessToken } from "../../services/authService";
+import { getProfile, getEnergyPredict } from "../../api";
+
 
 interface Notification {
   id: string;
@@ -43,74 +45,78 @@ const Dashboard: React.FC = () => {
   });
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userType] = useState("producer");
-
   const [currentTab, setCurrentTab] = useState<
     "Dashboard" | "Trading" | "Transactions" | "Profile" | "RegisterDevice"
   >("Dashboard");
 
   const userToken = getAccessToken() || "";
 
+  // ✅ Add these missing states
+  const [forecast, setForecast] = useState<{
+    temp: number;
+    humidity: number;
+    clouds: number;
+    sunlight: number;
+  } | null>(null);
+
+  const [predictedProduction, setPredictedProduction] = useState<number>(0);
+
   // ✅ WebSocket notifications
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:9080/ws/notifications/");
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setNotifications((prev) => [
-        { id: Date.now().toString(), ...data },
-        ...prev,
-      ]);
-    };
-    return () => ws.close();
-  }, []);
+  const WS_URL = import.meta.env.VITE_WS_URL;
+
+useEffect(() => {
+  const ws = new WebSocket(`${WS_URL}/ws/notifications/`);
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    setNotifications((prev) => [
+      { id: Date.now().toString(), ...data },
+      ...prev,
+    ]);
+  };
+  return () => ws.close();
+}, [])
 
   // ✅ Check if device exists → if not, redirect to RegisterDevice
   useEffect(() => {
-    const checkDevice = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/api/user_profile/", {
-          headers: { Authorization: `Bearer ${userToken}` }
-        });
-        const data = await res.json();
-        if (!data.devices || data.devices.length === 0) {
-          setCurrentTab("RegisterDevice");
-        }
-      } catch (err) {
-        console.error("Device check error:", err);
+  const checkDevice = async () => {
+    try {
+      const res = await getProfile(userToken);
+      const data = res.data;
+      if (!data.devices || data.devices.length === 0) {
+        setCurrentTab("RegisterDevice");
       }
-    };
-    if (userToken) checkDevice();
-  }, [userToken]);
+    } catch (err) {
+      console.error("Device check error:", err);
+    }
+  };
+  if (userToken) checkDevice();
+}, [userToken]);
 
-  // ✅ Energy + Forecast fetch
-  const [forecast, setForecast] = useState<{ temp: number; humidity: number; clouds: number; sunlight: number } | null>(null);
-  const [predictedProduction, setPredictedProduction] = useState<number>(0);
+// Energy + Forecast fetch
+useEffect(() => {
+  const fetchEnergy = async () => {
+    try {
+      const res = await getEnergyPredict();
+      const data = res.data;
 
-  useEffect(() => {
-    const fetchEnergy = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/api/energypredict/");
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const data = await res.json();
+      setEnergyData({
+        production: data.today_production,
+        consumption: Math.round(data.today_production * 0.7),
+        surplus: data.today_production - Math.round(data.today_production * 0.7),
+        credits: Math.round(data.predicted_next_day * 10),
+      });
 
-        setEnergyData({
-          production: data.today_production,
-          consumption: Math.round(data.today_production * 0.7),
-          surplus: data.today_production - Math.round(data.today_production * 0.7),
-          credits: Math.round(data.predicted_next_day * 10),
-        });
+      setForecast(data.weather);
+      setPredictedProduction(data.predicted_next_day);
+    } catch (err) {
+      console.error("Energy fetch error:", err);
+    }
+  };
 
-        setForecast(data.weather);
-        setPredictedProduction(data.predicted_next_day);
-      } catch (err) {
-        console.error("Energy fetch error:", err);
-      }
-    };
-
-    fetchEnergy();
-    const interval = setInterval(fetchEnergy, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
+  fetchEnergy();
+  const interval = setInterval(fetchEnergy, 5000);
+  return () => clearInterval(interval);
+}, []);
   const efficiency =
     energyData.production > 0
       ? ((energyData.production - energyData.consumption) / energyData.production) * 100
