@@ -4,7 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // ✅ Login and save tokens
 export const login = async (email: string, password: string) => {
-  const res = await axios.post(`${API_URL}/token/`, { email, password });
+  const res = await axios.post(`${API_URL}/token/`, { username:email, password });
   console.log("API_URL:", import.meta.env.VITE_API_URL);
 
   localStorage.setItem("accessToken", res.data.access);

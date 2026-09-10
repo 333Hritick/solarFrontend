@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 function App() {
   const { pathname, hash } = useLocation();
-  const { hasDevice, setHasDevice, loading, setLoading ,profile,setProfile} = useDevice();   // ✅ consume context
+  const { hasDevice, setHasDevice, loading, setLoading ,setProfile} = useDevice();   // ✅ consume context
 
   // ✅ Smooth scroll on route change
   useEffect(() => {
