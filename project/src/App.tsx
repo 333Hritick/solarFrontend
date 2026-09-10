@@ -52,20 +52,21 @@ function App() {
     }
 
     const checkDevice = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/api/profile/", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const data = await res.json();
-        setHasDevice(data.devices && data.devices.length > 0);
-        setProfile(data);
-      } catch (err) {
-        console.error("Error checking device:", err);
-        setHasDevice(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    setHasDevice(data.devices && data.devices.length > 0);
+    setProfile(data);
+  } catch (err) {
+    console.error("Error checking device:", err);
+    setHasDevice(false);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     checkDevice();
   }, [setHasDevice, setLoading]);
