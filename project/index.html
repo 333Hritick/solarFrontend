@@ -3,9 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solar Energy Website</title>
+
+    <!-- SEO Title and Description -->
+    <title>Solar Energy Calculator & Savings Estimator — SolarFrontend</title>
+    <meta name="description" content="Estimate solar panel output, savings, and payback for your home. Fast, accurate solar calculator with clear charts and exportable results.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://solarfrontend.onrender.com/">
+
+    <!-- Google site verification: replace CONTENT_VALUE with the code from GSC -->
+    <meta name="google-site-verification" content="CONTENT_VALUE" />
+
+    <!-- JSON-LD structured data: WebApplication and FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SolarFrontend",
+      "url": "https://solarfrontend.onrender.com/",
+      "description": "Estimate solar panel output, savings, and payback for your home with charts and exportable results.",
+      "applicationCategory": "Utilities",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How accurate is the solar savings estimate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Estimates use typical panel output and local solar irradiance; enter your exact system specs for better accuracy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I export the results?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — use the Download Report button to export results as CSV or PDF if available."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Optional: prefer-reduced-motion and theme-color for UX -->
+    <meta name="theme-color" content="#0d6efd" />
   </head>
   <body>
+    <!-- Accessible fallback heading for crawlers and users without JS -->
+    <noscript>
+      <h1>Solar Savings Calculator — Estimate Your Home’s Solar Output</h1>
+      <p>Enter your location, electricity usage, and system size to estimate output, savings, and payback.</p>
+    </noscript>
+
     <!-- React mounts here -->
     <div id="root"></div>
 
