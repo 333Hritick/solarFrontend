@@ -1,4 +1,6 @@
-import { CheckCircle, IndianRupee, Building, Home as HomeIcon } from "lucide-react";
+import { useState } from "react";
+import { CheckCircle, IndianRupee, Building, Home as HomeIcon, Sun, Leaf, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Subsidies = () => {
   const subsidyPrograms = [
@@ -7,166 +9,125 @@ const Subsidies = () => {
       amount: "₹14,588 per kW",
       maxAmount: "Up to ₹78,000",
       capacity: "For systems up to 3kW",
-      description:
-        "Direct subsidy on solar panel installation for residential rooftop systems",
-      eligibility: [
-        "Individual house owners",
-        "Group housing societies",
-        "Residential welfare associations",
-      ],
-      bgImage: "/images/pm.jpg", // ✅ your Narendra Modi image path
+      description: "Direct subsidy on solar panel installation for residential rooftop systems",
+      eligibility: ["Individual house owners", "Group housing societies", "Residential welfare associations"],
+      icon: <Sun className="w-12 h-12 text-yellow-400" />,
     },
     {
       title: "State Government Incentives",
       amount: "₹10,000–20,000 per kW",
       maxAmount: "Up to ₹50,000",
       capacity: "Varies by state",
-      description:
-        "Additional state-specific subsidies and incentives for solar adoption",
-      eligibility: [
-        "Varies by state policy",
-        "Residential consumers",
-        "Agricultural users",
-      ],
-      bgImage: "/images/nitish.webp", // ✅ different image for second
+      description: "Additional state-specific subsidies and incentives for solar adoption",
+      eligibility: ["Varies by state policy", "Residential consumers", "Agricultural users"],
+      icon: <Leaf className="w-12 h-12 text-green-500" />,
     },
     {
       title: "Net Metering Benefits",
       amount: "100% credit for excess power",
       maxAmount: "No limit",
       capacity: "All system sizes",
-      description:
-        "Sell excess solar power back to the grid at retail electricity rates",
-      eligibility: [
-        "All solar installations",
-        "Grid-connected systems",
-        "Approved by electricity board",
-      ],
-      bgImage: "/images/download.webp", // optional
+      description: "Sell excess solar power back to the grid at retail electricity rates",
+      eligibility: ["All solar installations", "Grid-connected systems", "Approved by electricity board"],
+      icon: <Zap className="w-12 h-12 text-sky-500" />,
     },
   ];
 
-  const taxBenefits = [
-    {
-      title: "Income Tax Deduction",
-      benefit: "Up to ₹1.5 lakh under Section 80C",
-      icon: <IndianRupee className="w-8 h-8 text-green-500" />,
-    },
-    {
-      title: "Accelerated Depreciation",
-      benefit: "80% depreciation in first year for businesses",
-      icon: <Building className="w-8 h-8 text-blue-500" />,
-    },
-    {
-      title: "GST Benefits",
-      benefit: "5% GST on solar modules (reduced rate)",
-      icon: <HomeIcon className="w-8 h-8 text-purple-500" />,
-    },
-  ];
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   return (
-    <section id="subsidies" className="py-20 bg-white relative">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+    <section id="subsidies" className="py-24 bg-gray-50 relative">
+      <div className="container mx-auto px-6 lg:px-12">
+        {/* Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
             Government Subsidies & Incentives
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             The Indian government is committed to promoting solar energy adoption. Take advantage of these
             generous subsidies and tax benefits to make solar installation more affordable.
           </p>
-        </div>
+        </motion.div>
 
         {/* Subsidy Programs */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-20">
           {subsidyPrograms.map((program, index) => (
-            <div
+            <motion.div
               key={index}
-              className="relative overflow-hidden rounded-2xl p-8 border border-sky-100 shadow-lg"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              className="bg-white rounded-3xl border border-gray-200 shadow-lg hover:shadow-2xl transition-transform duration-300 p-8 text-center flex flex-col justify-between min-h-[320px]"
             >
-              {/* ✅ Background Image */}
-              <img
-                src={program.bgImage}
-                alt={program.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-90"
-              />
-              {/* ✅ Dark overlay for text readability */}
-              <div className="absolute inset-0 bg-black/30"></div>
-
-              {/* ✅ Content */}
-              <div className="relative z-10 text-white">
-                <h3 className="text-2xl font-bold mb-2">{program.title}</h3>
-                <div className="flex items-center mb-2">
-                  <span className="text-3xl font-bold text-yellow-300">
-                    {program.amount}
-                  </span>
+              {/* Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 shadow-md">
+                  {program.icon}
                 </div>
-                <p className="text-lg font-semibold text-green-200">
-                  {program.maxAmount}
-                </p>
-                <p className="text-sm text-gray-200">{program.capacity}</p>
+              </div>
 
-                <p className="text-gray-100 mb-6 leading-relaxed">
-                  {program.description}
-                </p>
+              {/* Compact Content */}
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">{program.title}</h3>
+              <span className="text-3xl font-extrabold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                {program.amount}
+              </span>
+              <p className="text-lg font-semibold text-green-600 mt-2">{program.maxAmount}</p>
+              <p className="text-sm text-gray-500">{program.capacity}</p>
 
-                <div>
-                  <h4 className="font-semibold mb-3">Eligibility:</h4>
+              {/* Short description */}
+              <p className="text-gray-700 mt-4 leading-relaxed line-clamp-2">
+                {program.description}
+              </p>
+
+              {/* Expandable Section */}
+              {expandedIndex === index && (
+                <div className="mt-4 text-left">
+                  <h4 className="font-semibold text-gray-900 mb-2">Eligibility:</h4>
                   <ul className="space-y-2">
                     {program.eligibility.map((criteria, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-400 mr-2 mt-0.5 flex-shrink-0" />
+                      <li key={idx} className="flex items-start text-gray-700">
+                        <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                         <span>{criteria}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              </div>
-            </div>
+              )}
+
+              {/* Learn More Button */}
+              <button
+                onClick={() =>
+                  setExpandedIndex(expandedIndex === index ? null : index)
+                }
+                className="mt-6 text-sky-600 font-semibold hover:underline"
+              >
+                {expandedIndex === index ? "Show Less ↑" : "Learn More →"}
+              </button>
+            </motion.div>
           ))}
         </div>
 
-        {/* Tax Benefits */}
-        <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-8">
-            Additional Tax Benefits
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {taxBenefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow"
-              >
-                <div className="mb-4 flex justify-center">{benefit.icon}</div>
-                <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                  {benefit.title}
-                </h4>
-                <p className="text-gray-600">{benefit.benefit}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-8 text-center">
-            <h4 className="text-2xl font-bold text-white mb-4">
-              Total Potential Savings
-            </h4>
-            <p className="text-4xl font-bold text-white mb-2">₹1,50,000+</p>
-            <p className="text-green-100">
-              Combining subsidies, tax benefits, and electricity bill savings for a typical 3kW system
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-12 text-center">
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 text-center"
+        >
           <button
             onClick={() =>
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
             }
-            className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors"
+            className="bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white px-12 py-5 rounded-full font-bold text-xl shadow-lg hover:shadow-xl transition-all"
           >
             Check Your Eligibility Now
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

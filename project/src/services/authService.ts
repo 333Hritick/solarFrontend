@@ -29,5 +29,5 @@ export const refreshAccessToken = async () => {
 export const logout = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
-  window.location.href = "/login";
+  window.location.href = "/dashboard"; // Redirect to login or home page
 };

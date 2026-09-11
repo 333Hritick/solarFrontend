@@ -1,19 +1,26 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { X } from "lucide-react";
 
 const OurClients = () => {
   const sliderRef = useRef<Slider | null>(null);
+  const [popupData, setPopupData] = useState<{
+    title: string;
+    description1: string;
+    description2: string;
+    image: string;
+  } | null>(null);
 
   const settings = {
     dots: true,
     infinite: true,
-    speed: 600,
+    speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 3000,
     arrows: false,
   };
 
@@ -41,120 +48,92 @@ const OurClients = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Slides data
+  const slides = [
+    {
+      title: "Customer Story",
+      description1: "Thousands of homeowners trust MAC Solar for clean and reliable energy.",
+      description2: "Save up to 85% on electricity bills with long-lasting solar power.",
+      image: "/images/nandkishor.jpg",
+    },
+    {
+      title: "Happy Customers",
+      description1: "We deliver high-quality solar systems with trusted support.",
+      description2: "Customers love our fast installation and transparent service.",
+      image: "/images/customer2.jpeg",
+    },
+    {
+      title: "Trusted by Many",
+      description1: "MAC Solar has built a community of satisfied customers nationwide.",
+      description2: "Join thousands of families saving money and going green.",
+      image: "/images/customer3.jpeg",
+    },
+  ];
+
   return (
-    <section className="bg-[#b9dadd] py-20">
+    <section className="bg-[#b9dadd] py-16">
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg">
         
         {/* Title */}
-        <h2 className="text-center text-4xl font-extrabold text-gray-800 py-10 tracking-wide">
+        <h2 className="text-center text-3xl md:text-4xl font-extrabold text-gray-800 py-8 tracking-wide">
           Our Happy Customers
         </h2>
 
         {/* Slider Section */}
-        <div className="px-4 pb-10">
+        <div className="px-6 pb-8">
           <Slider ref={sliderRef} {...settings}>
-
-            {/* Slide 1 */}
-            <div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
-                
-                {/* Text */}
-                <div className="p-10 lg:p-12 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-gray-800 mb-4">
-                    Our Clients
-                  </h3>
-                  <p className="text-gray-600 mb-3 leading-relaxed">
-                    Thousands of homeowners trust MAC Solar for clean and
-                    reliable energy solutions.
-                  </p>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Save up to 85% on electricity bills with long-lasting solar
-                    power.
-                  </p>
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-semibold transition">
-                    READ MORE
-                  </button>
-                </div>
-
-                {/* FULL IMAGE (LARGE, NO CROP) */}
-                <div className="flex items-center justify-center bg-gray-100 rounded-r-lg p-2">
-                  <img
-                    src="/images/nandkishor.jpg"
-                    alt="Customer"
-                    className="max-h-[480px] lg:max-h-[520px] w-auto object-contain rounded-lg shadow-md"
-                  />
+            {slides.map((slide, index) => (
+              <div key={index}>
+                <div className="flex flex-col lg:flex-row items-center bg-white rounded-xl shadow-md p-6 gap-6">
+                  {/* Text */}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{slide.title}</h3>
+                    <p className="text-gray-600 mb-2">{slide.description1}</p>
+                    <p className="text-gray-600">{slide.description2}</p>
+                  </div>
+                  {/* Image clickable */}
+                  <div className="flex-shrink-0 cursor-pointer" onClick={() => setPopupData(slide)}>
+                    <img
+                      src={slide.image}
+                      alt="Customer"
+                      className="h-48 w-auto object-cover rounded-lg shadow hover:scale-105 transition-transform"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Slide 2 */}
-            <div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
-                <div className="p-10 lg:p-12 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-gray-800 mb-4">
-                    Happy Customers
-                  </h3>
-                  <p className="text-gray-600 mb-3 leading-relaxed">
-                    We deliver high-quality solar systems with trusted support.
-                  </p>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Our customers love our fast installation and transparent
-                    service.
-                  </p>
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-semibold transition">
-                    READ MORE
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-center bg-gray-100 rounded-r-lg p-2">
-                  <img
-                    src="/images/customer2.jpeg"
-                    alt="Customer"
-                    className="max-h-[480px] lg:max-h-[520px] w-auto object-contain rounded-lg shadow-md"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Slide 3 */}
-            <div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
-                <div className="p-10 lg:p-12 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-gray-800 mb-4">
-                    Trusted by Many
-                  </h3>
-                  <p className="text-gray-600 mb-3 leading-relaxed">
-                    MAC Solar has built a community of satisfied customers
-                    nationwide.
-                  </p>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Join thousands of families saving money and going green.
-                  </p>
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-semibold transition">
-                    READ MORE
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-center bg-gray-100 rounded-r-lg p-2">
-                  <img
-                    src="/images/customer3.jpeg"
-                    alt="Customer"
-                    className="max-h-[480px] lg:max-h-[520px] w-auto object-contain rounded-lg shadow-md"
-                  />
-                </div>
-              </div>
-            </div>
-
+            ))}
           </Slider>
         </div>
 
         {/* Logos Section */}
-        <div className="border-t py-10 px-6 flex flex-wrap justify-center gap-10 items-center">
-          <img src="/images/nandkishor.jpg" className="h-10 opacity-60 rounded" />
-          <img src="/images/solaruser.webp" className="h-10 opacity-60 rounded" />
-          <img src="/images/nandkishor.jpg" className="h-10 opacity-60 rounded" />
+        <div className="border-t py-6 px-6 flex flex-wrap justify-center gap-6 items-center">
+          <img src="/images/nandkishor.jpg" className="h-8 opacity-70 rounded" />
+          <img src="/images/solaruser.webp" className="h-8 opacity-70 rounded" />
+          <img src="/images/nandkishor.jpg" className="h-8 opacity-70 rounded" />
         </div>
       </div>
+
+      {/* Popup Modal */}
+      {popupData && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-2xl shadow-lg max-w-3xl p-6">
+            <button
+              className="absolute -top-6 -right-6 bg-white rounded-full p-2 shadow hover:bg-gray-100"
+              onClick={() => setPopupData(null)}
+            >
+              <X className="w-6 h-6 text-gray-800" />
+            </button>
+            <img
+              src={popupData.image}
+              alt="Customer"
+              className="w-full max-h-[60vh] object-contain rounded-lg mb-6"
+            />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">{popupData.title}</h3>
+            <p className="text-gray-700 mb-2">{popupData.description1}</p>
+            <p className="text-gray-700">{popupData.description2}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

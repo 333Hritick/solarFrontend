@@ -18,7 +18,6 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getAccessToken } from "./services/authService";
 import { useDevice } from "./components/context/DeviceContext";
-   // ✅ import context
 
 // ProtectedRoute wrapper
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -28,7 +27,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 function App() {
   const { pathname, hash } = useLocation();
-  const { hasDevice, setHasDevice, loading, setLoading ,setProfile} = useDevice();   // ✅ consume context
+  const { hasDevice, setHasDevice, loading, setLoading, setProfile } = useDevice();
 
   // ✅ Smooth scroll on route change
   useEffect(() => {
@@ -52,27 +51,26 @@ function App() {
     }
 
     const checkDevice = async () => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setHasDevice(data.devices && data.devices.length > 0);
-    setProfile(data);
-  } catch (err) {
-    console.error("Error checking device:", err);
-    setHasDevice(false);
-  } finally {
-    setLoading(false);
-  }
-};
-
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setHasDevice(data.devices && data.devices.length > 0);
+        setProfile(data);
+      } catch (err) {
+        console.error("Error checking device:", err);
+        setHasDevice(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     checkDevice();
-  }, [setHasDevice, setLoading]);
+  }, [setHasDevice, setLoading, setProfile]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Routes>
         {/* Public routes WITH Header */}
         <Route
@@ -80,14 +78,19 @@ function App() {
           element={
             <>
               <Header />
-              <Hero />
-              <Benefits />
-              <Subsidies />
-              <Calculator />
-              <Process />
-              <Testimonials />
-              <Contact />
-              <Footer />
+              <div className="min-h-screen bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500 pt-20 md:pt-2">
+
+
+
+                <Hero />
+                <Benefits />
+                <Subsidies />
+                <Calculator />
+                <Process />
+                <Testimonials />
+                <Contact />
+                <Footer />
+              </div>
             </>
           }
         />
@@ -96,7 +99,9 @@ function App() {
           element={
             <>
               <Header />
-              <EMICalculator />
+              <div className="min-h-screen bg-white md:pt-20">
+                <EMICalculator />
+              </div>
             </>
           }
         />
@@ -105,7 +110,9 @@ function App() {
           element={
             <>
               <Header />
-              <RegisterPage />
+              <div className="min-h-screen bg-white md:pt-20">
+                <RegisterPage />
+              </div>
             </>
           }
         />
@@ -114,7 +121,9 @@ function App() {
           element={
             <>
               <Header />
-              <LoginPage />
+              <div className="min-h-screen bg-white md:pt-20">
+                <LoginPage />
+              </div>
             </>
           }
         />
@@ -127,7 +136,12 @@ function App() {
               {loading ? (
                 <div>Loading...</div>
               ) : hasDevice ? (
-                <Dashboard />
+                <>
+                  <Header />
+                  <div className="min-h-screen bg-white md:pt-20">
+                    <Dashboard />
+                  </div>
+                </>
               ) : (
                 <Navigate to="/register-device" />
               )}
@@ -140,7 +154,12 @@ function App() {
           path="/register-device"
           element={
             <ProtectedRoute>
-              <RegisterDevice />
+              <>
+                <Header />
+                <div className="min-h-screen bg-white md:pt-20">
+                  <RegisterDevice />
+                </div>
+              </>
             </ProtectedRoute>
           }
         />

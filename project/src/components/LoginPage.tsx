@@ -45,7 +45,8 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">
+    <div className="min-h-screen pt-20 flex justify-center items-center bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">
+
       <form
         onSubmit={handleSubmit}
         autoComplete="off"
