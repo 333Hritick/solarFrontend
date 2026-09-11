@@ -9,13 +9,14 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="flex justify-between items-center bg-gray-800 text-white px-6 py-3 rounded-lg shadow-md">
-      <div className="flex space-x-6">
+    <nav className="w-full bg-gray-800 text-white px-4 md:px-6 py-3 shadow-md flex justify-between items-center">
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-4 md:gap-6">
         {["Dashboard", "Trading", "Transactions", "Profile"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab as any)}
-            className={`hover:text-yellow-400 ${
+            className={`transition-colors hover:text-yellow-400 ${
               activeTab === tab ? "text-yellow-400 font-bold" : ""
             }`}
           >
@@ -27,12 +28,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       {/* Logout button */}
       <button
         onClick={logout}
-        className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white font-semibold"
+        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-sm md:text-base font-semibold transition"
       >
-        <LogOut className="w-5 h-5" />
+        <LogOut className="w-4 h-4 md:w-5 md:h-5" />
         <span>Logout</span>
       </button>
-    </div>
+    </nav>
   );
 };
 
