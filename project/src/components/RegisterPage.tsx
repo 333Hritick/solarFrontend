@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Lock, Home, Briefcase } from "lucide-react";
-import { registerUser } from "../api";   // ✅ use centralized API
-
+import { registerUser } from "../api";   // centralized API
 
 const RegisterPage: React.FC = () => {
   const [form, setForm] = useState({
@@ -28,21 +26,28 @@ const RegisterPage: React.FC = () => {
     const newErrors: { [key: string]: string } = {};
 
     if (!form.name.trim()) newErrors.name = "Name is required";
+
     if (!form.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      newErrors.email = "Invalid email format";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Enter a valid email (e.g. user@example.com)";
     }
+
     if (!form.phone.trim()) {
       newErrors.phone = "Phone is required";
     } else if (!/^\d{10}$/.test(form.phone)) {
-      newErrors.phone = "Phone must be 10 digits";
+      newErrors.phone = "Phone must be exactly 10 digits";
     }
+
     if (!form.password.trim()) {
       newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(form.password)
+    ) {
+      newErrors.password =
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character";
     }
+
     if (!form.address.trim()) newErrors.address = "Address is required";
     if (!form.accounttype.trim()) newErrors.accounttype = "Account type is required";
 
@@ -51,32 +56,32 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!validateForm()) return;
+    e.preventDefault();
+    if (!validateForm()) return;
 
-  setLoading(true);
-  try {
-    await registerUser(form);   // ✅ use centralized API
-    alert("Registered successfully!");
-    setForm({
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      address: "",
-      accounttype: "",
-    });
-    navigate("/login");
-  } catch (err: any) {
-    if (err.response && err.response.data) {
-      setErrors(err.response.data);
-    } else {
-      alert("Registration failed!");
+    setLoading(true);
+    try {
+      await registerUser(form);
+      alert("Registered successfully!");
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        address: "",
+        accounttype: "",
+      });
+      navigate("/login");
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        setErrors(err.response.data);
+      } else {
+        alert("Registration failed!");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">
@@ -96,7 +101,7 @@ const RegisterPage: React.FC = () => {
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Enter your full name"
               value={form.name}
               onChange={handleChange}
               className="w-full p-2 bg-transparent outline-none"
@@ -112,9 +117,10 @@ const RegisterPage: React.FC = () => {
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="Enter a valid email (e.g. user@example.com)"
               value={form.email}
               onChange={handleChange}
+              autoComplete="off"
               className="w-full p-2 bg-transparent outline-none"
             />
           </div>
@@ -128,7 +134,7 @@ const RegisterPage: React.FC = () => {
             <input
               type="text"
               name="phone"
-              placeholder="Phone"
+              placeholder="Enter 10-digit phone number"
               value={form.phone}
               onChange={handleChange}
               className="w-full p-2 bg-transparent outline-none"
@@ -144,9 +150,10 @@ const RegisterPage: React.FC = () => {
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Strong password (min 8 chars, A-Z, a-z, 0-9, @#$%)"
               value={form.password}
               onChange={handleChange}
+              autoComplete="off"
               className="w-full p-2 bg-transparent outline-none"
             />
           </div>
@@ -160,7 +167,7 @@ const RegisterPage: React.FC = () => {
             <input
               type="text"
               name="address"
-              placeholder="Address"
+              placeholder="Enter your full address"
               value={form.address}
               onChange={handleChange}
               className="w-full p-2 bg-transparent outline-none"
@@ -176,7 +183,7 @@ const RegisterPage: React.FC = () => {
             <input
               type="text"
               name="accounttype"
-              placeholder="Account Type"
+              placeholder="Enter account type (e.g. Student, Admin)"
               value={form.accounttype}
               onChange={handleChange}
               className="w-full p-2 bg-transparent outline-none"
