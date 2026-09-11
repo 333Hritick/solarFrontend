@@ -7,6 +7,12 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  logLevel: 'info', // or 'debug'
+  logLevel: 'info',
+  build: {
+    outDir: 'dist', // where Vite outputs production build
+  },
+  server: {
+    port: 5173, // optional, default is 5173
+    open: true, // auto-open browser on dev
+  }
 });
-
