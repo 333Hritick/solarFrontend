@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "../services/authService";
 import { useDevice } from "./context/DeviceContext";
-import { registerDevice, getProfile } from "../api";   // ✅ use centralized API
+import { registerDevice, getProfile } from "../api";   // ✅ centralized API
 
 const RegisterDevice: React.FC = () => {
   const [form, setForm] = useState({
@@ -25,24 +24,14 @@ const RegisterDevice: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = getAccessToken();
-      if (!token) {
-        alert("You must be logged in to register a device.");
-        navigate("/login");
-        return;
-      }
+      // ✅ Call API helper (no token argument needed anymore)
+      await registerDevice({
+        ...form,
+        capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
+        installation_date: form.installation_date || null,
+      });
 
-      // ✅ Call API helper
-      await registerDevice(
-        {
-          ...form,
-          capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
-          installation_date: form.installation_date || null,
-        },
-        token
-      );
-
-      const res = await getProfile(token);
+      const res = await getProfile();
 
       setLoading(false);
       if (res.data.devices && res.data.devices.length > 0) {
@@ -61,8 +50,6 @@ const RegisterDevice: React.FC = () => {
       console.error("Register device error:", err);
     }
   };
-
-
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
