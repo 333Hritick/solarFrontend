@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDevice } from "./context/DeviceContext";
-import { registerDevice, getProfile } from "../api";   // ✅ centralized API
+import { registerDevice, getProfile } from "../api";   // centralized API
+import { getAccessToken } from "../services/authService";
 
 const RegisterDevice: React.FC = () => {
   const [form, setForm] = useState({
@@ -23,15 +24,25 @@ const RegisterDevice: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      // ✅ Call API helper (no token argument needed anymore)
-      await registerDevice({
-        ...form,
-        capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
-        installation_date: form.installation_date || null,
-      });
+    const token = getAccessToken();   // ✅ fetch token
+    if (!token) {
+      alert("You must be logged in to register a device.");
+      navigate("/login");
+      return;
+    }
 
-      const res = await getProfile();
+    try {
+      // ✅ Pass token explicitly
+      await registerDevice(
+        {
+          ...form,
+          capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
+          installation_date: form.installation_date || null,
+        },
+        token
+      );
+
+      const res = await getProfile(token);
 
       setLoading(false);
       if (res.data.devices && res.data.devices.length > 0) {
