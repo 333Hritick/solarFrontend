@@ -22,45 +22,50 @@ const RegisterDevice: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = getAccessToken();   // ✅ fetch token
-    if (!token) {
-      alert("You must be logged in to register a device.");
-      navigate("/login");
-      return;
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const token = getAccessToken();
+  if (!token) {
+    alert("You must be logged in to register a device.");
+    navigate("/login");
+    return;
+  }
+
+  try {
+    // Register new device
+    await registerDevice(
+      {
+        ...form,
+        capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
+        installation_date: form.installation_date || null,
+      },
+      token
+    );
+
+    // Fetch updated profile
+    const res = await getProfile(token);
+
+    setLoading(false);
+    if (res.data.devices && res.data.devices.length > 0) {
+      setHasDevice(true);
+      alert("Device registered successfully!");
+      // ✅ Only redirect after successful registration
+      navigate("/dashboard", { replace: true });
+    } else {
+      setHasDevice(false);
+      alert("Device not detected, please try again.");
     }
-
-    try {
-      // ✅ Pass token explicitly
-      await registerDevice(
-        {
-          ...form,
-          capacity_kw: form.capacity_kw ? parseFloat(form.capacity_kw) : null,
-          installation_date: form.installation_date || null,
-        },
-        token
-      );
-
-      const res = await getProfile(token);
-
-      setLoading(false);
-      if (res.data.devices && res.data.devices.length > 0) {
-        setHasDevice(true);
-        navigate("/dashboard", { replace: true });
-      } else {
-        setHasDevice(false);
-        alert("Device not detected, please try again.");
-      }
-    } catch (err: any) {
-      if (err.response?.data?.error) {
-        alert(`Error: ${err.response.data.error}`);
-      } else {
-        alert("Error registering device");
-      }
-      console.error("Register device error:", err);
+  } catch (err: any) {
+    if (err.response?.data?.error) {
+      alert(`Error: ${err.response.data.error}`);
+    } else {
+      alert("Error registering device");
     }
-  };
+    console.error("Register device error:", err);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">

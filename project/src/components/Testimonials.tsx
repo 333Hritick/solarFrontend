@@ -115,25 +115,30 @@ const OurClients = () => {
 
       {/* Popup Modal */}
       {popupData && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="relative bg-white rounded-2xl shadow-lg max-w-3xl p-6">
-            <button
-              className="absolute -top-6 -right-6 bg-white rounded-full p-2 shadow hover:bg-gray-100"
-              onClick={() => setPopupData(null)}
-            >
-              <X className="w-6 h-6 text-gray-800" />
-            </button>
-            <img
-              src={popupData.image}
-              alt="Customer"
-              className="w-full max-h-[60vh] object-contain rounded-lg mb-6"
-            />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">{popupData.title}</h3>
-            <p className="text-gray-700 mb-2">{popupData.description1}</p>
-            <p className="text-gray-700">{popupData.description2}</p>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]">
+    <div className="relative bg-white rounded-2xl shadow-lg max-w-3xl w-full p-6">
+      <button
+        aria-label="Close"
+        className="absolute top-4 right-4 cursor-pointer bg-gray-100 rounded-full p-2 shadow hover:bg-gray-200 transition"
+        onClick={() => setPopupData(null)}
+      >
+        <X className="w-6 h-6 text-gray-800" />
+      </button>
+
+      <img
+        src={popupData.image}
+        alt="Customer"
+        className="w-full max-h-[60vh] object-contain rounded-lg mb-6"
+      />
+      <h3 className="text-2xl font-bold text-gray-900 mb-4">{popupData.title}</h3>
+      <p className="text-gray-700 mb-2">{popupData.description1}</p>
+      <p className="text-gray-700">{popupData.description2}</p>
+    </div>
+  </div>
+)}
+
+
+
     </section>
   );
 };

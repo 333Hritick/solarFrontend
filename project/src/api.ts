@@ -8,8 +8,19 @@ export const api = axios.create({
 
 // Auth
 export const registerUser = (data: any) => api.post("/register/", data);
-export const loginUser = (data: any) =>
-  api.post("/token/", { username: data.email, password: data.password });
+export const loginUser = async (data: any) => {
+  const res = await api.post("/token/", {
+    username: data.email,
+    password: data.password,
+  });
+
+  // Save tokens
+  localStorage.setItem("accessToken", res.data.access);
+  localStorage.setItem("refreshToken", res.data.refresh);
+
+  return res.data;
+};
+
 export const getProfile = (token: string) =>
   api.get("/profile/", { headers: { Authorization: `Bearer ${token}` } });
 

@@ -17,9 +17,8 @@ import RegisterDevice from "./components/RegisterDevice";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getAccessToken } from "./services/authService";
-import { useDevice } from "./components/context/DeviceContext";
 
-// ProtectedRoute wrapper
+// ProtectedRoute wrapper → only checks token
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = getAccessToken();
   return token ? children : <Navigate to="/login" />;
@@ -27,7 +26,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 function App() {
   const { pathname, hash } = useLocation();
-  const { hasDevice, setHasDevice, loading, setLoading, setProfile } = useDevice();
 
   // ✅ Smooth scroll on route change
   useEffect(() => {
@@ -41,34 +39,6 @@ function App() {
     }
   }, [pathname, hash]);
 
-  // ✅ Check if user has a registered device
-  useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      setHasDevice(false);
-      setLoading(false);
-      return;
-    }
-
-    const checkDevice = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        setHasDevice(data.devices && data.devices.length > 0);
-        setProfile(data);
-      } catch (err) {
-        console.error("Error checking device:", err);
-        setHasDevice(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkDevice();
-  }, [setHasDevice, setLoading, setProfile]);
-
   return (
     <div className="min-h-screen">
       <Routes>
@@ -79,9 +49,6 @@ function App() {
             <>
               <Header />
               <div className="min-h-screen bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500 pt-20 md:pt-2">
-
-
-
                 <Hero />
                 <Benefits />
                 <Subsidies />
@@ -128,28 +95,22 @@ function App() {
           }
         />
 
-        {/* Dashboard route with device check */}
+        {/* Dashboard route → only protected by token */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
-              {loading ? (
-                <div>Loading...</div>
-              ) : hasDevice ? (
-                <>
-                  <Header />
-                  <div className="min-h-screen bg-white md:pt-20">
-                    <Dashboard />
-                  </div>
-                </>
-              ) : (
-                <Navigate to="/register-device" />
-              )}
+              <>
+                <Header />
+                <div className="min-h-screen bg-white md:pt-20">
+                  <Dashboard />
+                </div>
+              </>
             </ProtectedRoute>
           }
         />
 
-        {/* Register Device route */}
+        {/* Register Device route → only protected by token */}
         <Route
           path="/register-device"
           element={

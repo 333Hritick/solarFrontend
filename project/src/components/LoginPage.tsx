@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
-import { loginUser } from "../api";   // centralized API
+import { loginUser,getProfile } from "../api";   // centralized API
 
 const LoginPage: React.FC = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -37,25 +37,41 @@ const LoginPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    setLoading(true);
-    try {
-      await loginUser(form);
-      alert("Login successful!");
-      navigate("/dashboard");
-    } catch (err: any) {
-      if (err.response && err.response.data) {
-        setErrors(err.response.data);
-      } else {
-        alert("Login failed!");
-      }
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    // Login and save tokens
+    await loginUser(form);
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Login failed: no token found");
+      return;
     }
-    
-  };
+
+    // Fetch profile with token
+    const profile = await getProfile(token);
+
+    // Decide where to go based on device existence
+    if (profile.data.devices && profile.data.devices.length > 0) {
+      // ✅ Already has device → go to dashboard
+      navigate("/dashboard");
+    } else {
+      // ✅ No device yet → go to registerDevice
+      navigate("/register-Device");
+    }
+  } catch (err: any) {
+    if (err.response && err.response.data) {
+      setErrors(err.response.data);
+    } else {
+      alert("Login failed!");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-900 via-sky-700 to-sky-500">
