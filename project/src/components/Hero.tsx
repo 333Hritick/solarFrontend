@@ -3,16 +3,18 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-   <section
-  id="home"
-  className="relative min-h-screen flex items-center justify-center 
-             overflow-hidden bg-gradient-to-r from-sky-50 via-white to-sky-100 
-             pt-28 md:pt-32"
->
-
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden 
+                 bg-cover bg-center pt-28 md:pt-32"
+      style={{ backgroundImage: "url('/images/panel.jpg')" }} // <-- solar background
+    >
+      {/* Overlay for readability */}
+      <div className="absolute inset-0 bg-white/70"></div>
 
       <div className="container mx-auto px-6 py-10 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
           {/* Left Text Section */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -29,9 +31,7 @@ const Hero = () => {
             <div className="bg-sky-50 border-l-4 border-sky-600 p-4 rounded-lg shadow-sm mb-6">
               <p className="text-gray-700 italic">
                 "In order to further sustainable development and people's well-being,
-                we are launching the PM Surya Ghar: Muft Bijli Yojana. This project,
-                with an investment of over Rs. 75,000 crores, aims to light up 1 crore
-                households by providing up to 300 units of free electricity every month."
+                we are launching the PM Surya Ghar: Muft Bijli Yojana..."
               </p>
               <p className="mt-2 font-semibold text-gray-800">
                 Shri Narendra Modi <br />
@@ -63,15 +63,15 @@ const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Right Image Section */}
-         <motion.div
+          {/* Right Image Section - PM Modi */}
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="flex justify-center"
           >
             <img
-              src="images/modi.png"
+              src="/images/modi.png"
               alt="PM Modi"
               className="w-full max-w-md object-contain drop-shadow-xl"
             />

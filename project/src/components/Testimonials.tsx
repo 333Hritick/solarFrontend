@@ -20,7 +20,7 @@ const OurClients = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 1500,
     arrows: false,
   };
 
@@ -49,26 +49,65 @@ const OurClients = () => {
   }, []);
 
   // Slides data
-  const slides = [
-    {
-      title: "Customer Story",
-      description1: "Thousands of homeowners trust MAC Solar for clean and reliable energy.",
-      description2: "Save up to 85% on electricity bills with long-lasting solar power.",
-      image: "/images/nandkishor.jpg",
-    },
-    {
-      title: "Happy Customers",
-      description1: "We deliver high-quality solar systems with trusted support.",
-      description2: "Customers love our fast installation and transparent service.",
-      image: "/images/customer2.jpeg",
-    },
-    {
-      title: "Trusted by Many",
-      description1: "MAC Solar has built a community of satisfied customers nationwide.",
-      description2: "Join thousands of families saving money and going green.",
-      image: "/images/customer3.jpeg",
-    },
-  ];
+  // Slides data
+const slides = [
+  {
+    title: "Customer Story",
+    description1: "Thousands of homeowners trust MAC Solar for clean and reliable energy.",
+    description2: "Save up to 85% on electricity bills with long-lasting solar power.",
+    image: "/images/nandkishor.jpg",
+  },
+  {
+    title: "Happy Customers",
+    description1: "We deliver high-quality solar systems with trusted support.",
+    description2: "Customers love our fast installation and transparent service.",
+    image: "/images/p1.jpeg",
+  },
+  {
+    title: "Trusted by Many",
+    description1: "MAC Solar has built a community of satisfied customers nationwide.",
+    description2: "Join thousands of families saving money and going green.",
+    image: "/images/p2.jpeg",
+  },
+  // New slides
+  {
+    title: "Eco-Friendly Living",
+    description1: "Our solar panels help families embrace sustainable lifestyles.",
+    description2: "Enjoy clean energy while reducing your carbon footprint.",
+    image: "/images/customer3.jpeg",
+  },
+  {
+    title: "Reliable Support",
+    description1: "We provide 24/7 assistance to ensure smooth solar usage.",
+    description2: "Our team is always ready to help you with any queries.",
+    image: "/images/p3.jpeg",
+  },
+  {
+    title: "Affordable Solutions",
+    description1: "Solar energy doesn’t have to be expensive.",
+    description2: "We offer cost-effective packages tailored to your needs.",
+    image: "/images/p4.jpeg",
+  },
+  {
+    title: "Nationwide Reach",
+    description1: "MAC Solar serves customers across India.",
+    description2: "No matter where you are, we bring solar to your doorstep.",
+    image: "/images/p5.jpeg",
+  },
+  {
+    title: "Future Ready",
+    description1: "Our technology is built for long-term performance.",
+    description2: "Stay ahead with advanced solar innovations.",
+    image: "/images/p6.jpeg",
+  },
+  {
+    title: "Community Impact",
+    description1: "We empower communities with renewable energy projects.",
+    description2: "Together, we’re building a greener tomorrow.",
+    image: "/images/customer2.jpeg",
+  },
+];
+
 
   return (
     <section className="bg-[#b9dadd] py-16">
@@ -108,8 +147,16 @@ const OurClients = () => {
         {/* Logos Section */}
         <div className="border-t py-6 px-6 flex flex-wrap justify-center gap-6 items-center">
           <img src="/images/nandkishor.jpg" className="h-8 opacity-70 rounded" />
-          <img src="/images/solaruser.webp" className="h-8 opacity-70 rounded" />
-          <img src="/images/nandkishor.jpg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p1.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p2.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p3.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p4.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p5.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/p6.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/customer2.jpeg" className="h-8 opacity-70 rounded" />
+          <img src="/images/customer3.jpeg" className="h-8 opacity-70 rounded" />
+
+
         </div>
       </div>
 
