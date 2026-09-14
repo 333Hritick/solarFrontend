@@ -18,7 +18,6 @@ const Contact: React.FC = () => {
   const [eligibilityMessage, setEligibilityMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  
   const checkEligibility = (data: any) => {
     const area = parseFloat(data.rooftopArea);
     const bill = parseFloat(data.monthlyBill);
@@ -39,7 +38,6 @@ const Contact: React.FC = () => {
     return `✅ Eligible! You could save around ₹${estimatedSavings} per month on your bill.`;
   };
 
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -49,45 +47,54 @@ const Contact: React.FC = () => {
     });
   };
 
-  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (isSubmitting) return; 
+  if (isSubmitting) return;
 
-    const eligibilityResult = checkEligibility(formData);
-    setEligibilityMessage(eligibilityResult);
+  // ✅ Step 1: Immediate feedback (shows instantly)
+  toast.success("✅ Thanks for submitting! Your request is being processed...");
 
-    setIsSubmitting(true);
-    const toastId = toast.loading("⏳ Submitting your form...");
+  const eligibilityResult = checkEligibility(formData);
+  setEligibilityMessage(eligibilityResult);
 
-    try {
-  const response = await createQuote(formData, {
-    headers: { "Content-Type": "application/json" },
-  });
-  console.log("Quote created:", response.data);
+  setIsSubmitting(true);
+  const toastId = toast.loading("⏳ Sending data to server...");
 
-  toast.success("✅ Thank you! We'll contact you within 24 hours.", { id: toastId });
-  setFormData({
-    name: "",
-    email: "",
-    phone: "",
-    district: "",
-    monthlyBill: "",
-    rooftopArea: "",
-    message: "",
-  });
-} catch (err: any) {
-  console.error("Error creating quote:", err.response?.data || err.message);
-  toast.error("❌ Something went wrong. Please try again.", { id: toastId });
-}finally {
-      
-      setTimeout(() => {
-        setIsSubmitting(false);
-        toast.dismiss(toastId);
-      }, 1500);
-    }
-  };
+  try {
+    // Step 2: Backend call
+    const response = await createQuote(formData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log("Quote created:", response.data);
+
+    // 🎉 Step 3: Backend confirmation
+    toast.success(
+      "🎉 Your form has been submitted successfully! Please check your email for confirmation.",
+      { id: toastId }
+    );
+
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      district: "",
+      monthlyBill: "",
+      rooftopArea: "",
+      message: "",
+    });
+  } catch (err: any) {
+    console.error("Error creating quote:", err.response?.data || err.message);
+    toast.error("❌ Something went wrong. Please try again.", { id: toastId });
+  } finally {
+    setTimeout(() => {
+      setIsSubmitting(false);
+      toast.dismiss(toastId);
+    }, 1500);
+  }
+};
+
 
   const contactInfo = [
     {
@@ -122,226 +129,165 @@ const Contact: React.FC = () => {
     "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan",
     "Supaul", "Vaishali", "West Champaran"
   ];
-
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Get Your Free Solar Consultation
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Ready to start your solar journey? Our experts are here to help you design the perfect 
-            solar solution for your home and maximize your savings.
-          </p>
+    <section id="contact" className="py-12 bg-white">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-8">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+        Get Your Free Solar Consultation
+      </h2>
+      <p className="text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Ready to start your solar journey? Our experts will design the perfect solar solution for your home.
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Form */}
+      <div className="bg-gray-50 rounded-xl p-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">
+          Request Your Personalized Quote
+        </h3>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name + Email */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+              placeholder="Full Name *"
+            />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+              placeholder="Email *"
+            />
+          </div>
+
+          {/* Phone + District */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+              placeholder="Phone *"
+            />
+            <select
+              name="district"
+              value={formData.district}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+            >
+              <option value="">Select District *</option>
+              {biharDistricts.map((dist, index) => (
+                <option key={index} value={dist}>{dist}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Bill + Area */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="number"
+              name="monthlyBill"
+              value={formData.monthlyBill}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+              placeholder="Monthly Bill (₹)"
+            />
+            <input
+              type="number"
+              name="rooftopArea"
+              value={formData.rooftopArea}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+              placeholder="Rooftop Area (sq ft)"
+            />
+          </div>
+
+          {/* Message */}
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+            placeholder="Additional message..."
+          />
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`w-full ${
+              isSubmitting ? "bg-sky-400 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
+            } text-white px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center`}
+          >
+            {isSubmitting ? (
+              <>
+                <span className="loader mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5 animate-spin"></span>
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="w-5 h-5 mr-2" />
+                Get Free Quote
+              </>
+            )}
+          </button>
+        </form>
+
+        {eligibilityMessage && (
+          <div className="mt-3 p-3 bg-gray-100 rounded-lg text-center text-sm font-medium">
+            {eligibilityMessage}
+          </div>
+        )}
+      </div>
+
+      {/* Contact Info + Why Choose Us */}
+      <div className="space-y-6">
+        <div className="bg-gradient-to-br from-sky-500 to-emerald-500 rounded-xl p-6 text-white">
+          <h3 className="text-xl font-bold mb-4">Get in Touch</h3>
+          <div className="space-y-4">
+            {contactInfo.map((info, index) => (
+              <div key={index} className="flex items-start">
+                <div className="bg-white/20 rounded-lg p-2 mr-3">{info.icon}</div>
+                <div>
+                  <h4 className="font-semibold text-white">{info.title}</h4>
+                  {info.details.map((detail, idx) => (
+                    <p key={idx} className="text-sky-100 text-sm">{detail}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
-          <div className="bg-gray-50 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Request Your Personalized Quote
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                    placeholder="Enter your full name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                    placeholder="Enter your email"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-                <div>
-                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-  District*
-</label>
-<select
-  name="district"
-  value={formData.district}
-  onChange={handleInputChange}
-  required
-  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
->
-  <option value="">Select your district</option>
-  {biharDistricts.map((dist, index) => (
-    <option key={index} value={dist}>
-      {dist}
-    </option>
-  ))}
-</select>
-
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Monthly Electricity Bill
-                  </label>
-                  <input
-                    type="number"
-                    name="monthlyBill"
-                    value={formData.monthlyBill}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                    placeholder="₹ Enter amount"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Rooftop Area (sq ft)
-                  </label>
-                  <input
-                    type="number"
-                    name="rooftopArea"
-                    value={formData.rooftopArea}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                    placeholder="Enter area in sq ft"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Additional Message
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
-                  placeholder="Any specific questions or requirements..."
-                />
-              </div>
-
-             <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`w-full ${
-          isSubmitting
-            ? "bg-sky-400 cursor-not-allowed"
-            : "bg-sky-500 hover:bg-sky-600"
-        } text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center`}
-      >
-        {isSubmitting ? (
-          <>
-            <span className="loader mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5 animate-spin"></span>
-            Submitting...
-          </>
-        ) : (
-          <>
-            <Send className="w-5 h-5 mr-2" />
-            Get Free Quote
-          </>
-        )}
-      </button>
-
-            </form>
-            {eligibilityMessage && (
-  <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center font-medium">
-    {eligibilityMessage}
-  </div>
-)}
-
-          </div>
-
-         
-          <div className="space-y-8">
-            <div className="bg-gradient-to-br from-sky-500 to-emerald-500 rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
-              <p className="text-sky-100 mb-8 leading-relaxed">
-                Our solar experts are ready to help you make the switch to clean energy. 
-                Contact us today for a free consultation and personalized quote.
-              </p>
-              
-              <div className="space-y-6">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="bg-white/20 rounded-lg p-3 mr-4">
-                      {info.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white mb-1">{info.title}</h4>
-                      {info.details.map((detail, idx) => (
-                        <p key={idx} className="text-sky-100">{detail}</p>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Why Choose MAC Solar?
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Free site survey and system design</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Maximum government subsidy assistance</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Professional installation in 1-3 days</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">25-year comprehensive warranty</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">24/7 monitoring and support</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="bg-gray-50 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose MAC Solar?</h3>
+          <ul className="space-y-2 text-sm text-gray-700">
+            <li>✅ Free site survey and system design</li>
+            <li>✅ Maximum government subsidy assistance</li>
+            <li>✅ Professional installation in 1-3 days</li>
+            <li>✅ 25-year comprehensive warranty</li>
+            <li>✅ 24/7 monitoring and support</li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
   );
 };
 

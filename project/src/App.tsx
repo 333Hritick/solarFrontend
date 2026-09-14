@@ -17,6 +17,7 @@ import RegisterDevice from "./components/RegisterDevice";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getAccessToken } from "./services/authService";
+import { Toaster } from "react-hot-toast";
 
 // ProtectedRoute wrapper → only checks token
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -41,6 +42,9 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      {/* ✅ Toast notifications will now render */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       <Routes>
         {/* Public routes WITH Header */}
         <Route
