@@ -16,7 +16,7 @@ const NotificationDropdown: React.FC = () => {
     const socket = new WebSocket("ws://localhost:9080/ws/notifications/");
 
     socket.onmessage = (event) => {
-        console.log("incoming:",event.data);
+      console.log("incoming:", event.data);
       const data = JSON.parse(event.data);
       setNotifications((prev) => [data, ...prev]);
     };
@@ -27,11 +27,11 @@ const NotificationDropdown: React.FC = () => {
   const unreadCount = notifications.length;
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       {/* Bell icon with badge */}
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-full hover:bg-gray-200"
+        className="relative p-2 rounded-full hover:bg-gray-200 mx-auto md:mx-0"
       >
         <Bell className="w-6 h-6 text-yellow-500" />
         {unreadCount > 0 && (
@@ -43,7 +43,9 @@ const NotificationDropdown: React.FC = () => {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg border z-50">
+        <div
+          className="absolute md:right-0 md:w-80 w-full left-0 mt-2 bg-white shadow-lg rounded-lg border z-50"
+        >
           <div className="p-2 font-semibold border-b">Notifications</div>
           {notifications.length === 0 ? (
             <div className="p-3 text-gray-500 text-sm">No new notifications</div>

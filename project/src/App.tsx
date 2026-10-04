@@ -13,6 +13,8 @@ import RegisterPage from "./components/RegisterPage";
 import LoginPage from "./components/LoginPage";
 import Dashboard from "./components/Dashboard/Dashboard";
 import RegisterDevice from "./components/RegisterDevice";
+import EcoImpact from "./components/EcoImpact";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -45,6 +47,9 @@ function App() {
       {/* ✅ Toast notifications will now render */}
       <Toaster position="top-center" reverseOrder={false} />
 
+      {/* ✅ Global Chat Assistant (always visible) */}
+      <FloatingWhatsApp />
+
       <Routes>
         {/* Public routes WITH Header */}
         <Route
@@ -58,6 +63,7 @@ function App() {
                 <Subsidies />
                 <Calculator />
                 <Process />
+                <EcoImpact/>
                 <Testimonials />
                 <Contact />
                 <Footer />

@@ -60,12 +60,9 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* RIGHT SIDE: Notifications + Auth */}
+        {/* RIGHT SIDE: Notifications + Auth (Desktop only) */}
         <div className="hidden md:flex items-center gap-6">
-          {/* Notification Bell */}
           <NotificationDropdown />
-
-          {/* Auth Buttons */}
           <Link
             to="/login"
             className="px-5 py-2 border border-white text-white rounded-full transition-colors duration-200 hover:scale-105 hover:bg-white hover:text-sky-700"
@@ -111,6 +108,12 @@ const Header = () => {
             </Link>
           ))}
           <hr />
+
+          {/* ✅ Notification Bell for Mobile */}
+          <div className="flex justify-center py-2">
+            <NotificationDropdown />
+          </div>
+
           <Link
             to="/login"
             className="block py-2 text-center border border-sky-600 rounded-full text-sky-600 hover:bg-sky-600 hover:text-white"
